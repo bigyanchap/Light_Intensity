@@ -1,0 +1,31 @@
+/*PWM based LED light intensity control 
+ * with LDR: the darkness of environment is inversely 
+ * proportional to the light intesity of LED
+ * Author: Bigyan Chapagain. April 16, 2016*/
+void setup() {
+pinMode(9,OUTPUT);
+Serial.begin(9600);
+}
+void loop() {
+  int val = analogRead(0);
+  val=constrain(val,400,650); 
+  //650 = max bright input to LDR
+  //400 = max dark input to LDR
+  int duty=map(val,400,650,20,0);
+  //mapping: inverse proportion
+    if(duty==0){ 
+      /*Keep LED, completely, 
+       *off during max light to LDR*/
+      digitalWrite(9,LOW);
+    }
+    else{ //Pulse Width Modulation block
+    digitalWrite(9,HIGH);
+    delay(duty);
+    digitalWrite(9,LOW);
+    delay(20-duty);
+    }
+}
+/*This project can be done quickly and easily
+ *by using analogWrite function.
+ *Nevertheless, this is to show how PWM 
+ *can be used to harness the analogness.*/
